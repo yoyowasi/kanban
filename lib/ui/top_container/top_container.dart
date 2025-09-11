@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kanban/ui/widgets/done_progress_indicator.dart';
+import 'package:kanban/ui/top_container/done_progress_indicator.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TopContainer extends StatelessWidget {
@@ -17,8 +17,8 @@ class TopContainer extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "KanBan_Board",
-              style: TextStyle(fontSize: 22),
+              'KanBan_Board',
+              style: TextStyle(fontSize: 18),
             ),
           ),
           DoneProgressIndicator()

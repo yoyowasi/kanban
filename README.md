@@ -14,3 +14,5 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+## 플러터 실행시 이렇게 해야지 에러가 나지 않음
+flutter fun --debug --enable-experiment=dot-shorthands

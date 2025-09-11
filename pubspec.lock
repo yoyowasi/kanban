@@ -196,10 +196,10 @@ packages:
     dependency: transitive
     description:
       name: leak_tracker
-      sha256: "8dcda04c3fc16c14f48a7bb586d4be1f0d1572731b6d81d51772ef47c02081e0"
+      sha256: "33e2e26bdd85a0112ec15400c8cbffea70d0f9c3407491f672a2fad47915e2de"
       url: "https://pub.dev"
     source: hosted
-    version: "11.0.1"
+    version: "11.0.2"
   leak_tracker_flutter_testing:
     dependency: transitive
     description:
@@ -364,10 +364,10 @@ packages:
     dependency: "direct main"
     description:
       name: shadcn_ui
-      sha256: "6a2f39ecb7b1838561aba8445e695868f3c442b4cc0dfb1bbf76dfb8543cb447"
+      sha256: c5111f4086eebc411bff02f147c97f7a7baa30072531d83e7a1c3fd2a2101308
       url: "https://pub.dev"
     source: hosted
-    version: "0.30.1+1"
+    version: "0.30.5"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -510,5 +510,5 @@ packages:
     source: hosted
     version: "6.6.1"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.9.2 <4.0.0"
   flutter: ">=3.35.0"
