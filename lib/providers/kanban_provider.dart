@@ -3,6 +3,7 @@ import 'package:kanban/enums/kanban_status.dart';
 
 class KanbanProvider with ChangeNotifier {
   KanbanStatus kanbanStatus = .todo;
+  List<(KanbanStatus status, String title)> items = [];
 
   // refeshUI()
   void _refreshUI() => notifyListeners();
@@ -12,4 +13,16 @@ class KanbanProvider with ChangeNotifier {
     kanbanStatus = status;
     _refreshUI();
   }
+
+  // 아이템 추가
+  void addItem(KanbanStatus status, String value){
+    items.add((status,value));
+    notifyListeners();
+  }
+  // 아이템 삭제
+  void deleteItemIndex(int index){
+    items.removeAt(index);
+    notifyListeners();
+  }
+  
 }
