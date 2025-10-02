@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:kanban/enums/kanban_status.dart';
+import 'package:kanban/models/kanban_item.dart';
+import 'package:uuid/uuid.dart';
 
 class KanbanProvider with ChangeNotifier {
   KanbanStatus kanbanStatus = .todo;
-  List<(KanbanStatus status, String title)> items = [];
+  List<KanbanItem> items = [];
 
   // refeshUI()
   void _refreshUI() => notifyListeners();
@@ -15,13 +17,18 @@ class KanbanProvider with ChangeNotifier {
   }
 
   // 아이템 추가
-  void addItem(KanbanStatus status, String value){
-    items.add((status,value));
+  void addItem(KanbanStatus status, String title){
+    items.add(KanbanItem(
+      id:Uuid().v4(), 
+      status: status,
+      title: title,
+      )
+    );
     notifyListeners();
   }
   // 아이템 삭제
-  void deleteItemIndex(int index){
-    items.removeAt(index);
+  void deleteItemIndex(String id){
+    items.removeWhere((e)=> e.id == id);
     notifyListeners();
   }
   

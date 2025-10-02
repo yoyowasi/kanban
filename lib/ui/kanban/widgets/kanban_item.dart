@@ -13,13 +13,13 @@ class KanbanItem extends StatelessWidget {
   final VoidCallback? onStatus;
   
   const KanbanItem({
-    Key? key,
+    super.key,
     required this.status,
     required this.title,
     required this.onCheckbox,
     required this.onDelete,
     this.onStatus,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
