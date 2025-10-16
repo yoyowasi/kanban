@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kanban/enums/kanban_status.dart';
 import 'package:kanban/models/kanban_item.dart' as model;
 import 'package:kanban/ui/add_edit_task_screen.dart';
@@ -27,13 +26,12 @@ class KanbanItem extends StatelessWidget {
       DateFormat('yyyy. MM. dd HH:mm').format(item.date),
       style: const TextStyle(
         fontSize: 14,
-        color: Colors.black, // ✅ 시간 색상을 검은색으로 변경
+        color: Colors.black, // ✅ 시간 색상 그대로 유지
       ),
     );
 
     return GestureDetector(
       onTap: () {
-        // ✅ Done 상태에서는 수정 화면 이동 안 함
         if (item.status != KanbanStatus.done) {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => AddEditTaskScreen(status: item.status, item: item),
@@ -46,11 +44,17 @@ class KanbanItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Checkbox(
-              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-              activeColor: Colors.green,
-              onChanged: (_) => onCheckbox(),
-              value: item.status == KanbanStatus.done,
-            ),
+  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+  activeColor: Colors.green, // ✅ 기존 색상 유지
+  onChanged: (_) {
+    // ✅ Done 상태일 땐 동작만 막고 색상은 그대로 유지
+    if (item.status != KanbanStatus.done) {
+      onCheckbox();
+    }
+  },
+  value: item.status == KanbanStatus.done,
+),
+
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -76,7 +80,6 @@ class KanbanItem extends StatelessWidget {
         footer: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // ✅ 모든 상태에서 description은 유지 (Done도 포함)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 4.0),
@@ -90,7 +93,6 @@ class KanbanItem extends StatelessWidget {
                       style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
                     const SizedBox(height: 8),
-                    // ✅ Done일 때는 오른쪽 정렬, 나머지는 왼쪽
                     if (item.status == KanbanStatus.done)
                       Align(
                         alignment: Alignment.centerRight,
@@ -102,8 +104,6 @@ class KanbanItem extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ✅ Done 상태에서는 오른쪽 아이콘(Play/Pause)을 표시하지 않음
             if (item.status != KanbanStatus.done)
               Row(
                 children: [
