@@ -5,24 +5,32 @@ import 'package:kanban/enums/kanban_status.dart';
 
 class KanbanItem {
   final String id;
-  final KanbanStatus status;
-  final String title;
+  KanbanStatus status;
+  String title;
+  String description;
+  DateTime date;
 
   KanbanItem({
     required this.id,
     required this.status,
     required this.title,
+    required this.description,
+    required this.date,
   });
 
   KanbanItem copyWith({
     String? id,
     KanbanStatus? status,
     String? title,
+    String? description,
+    DateTime? date,
   }) {
     return KanbanItem(
       id: id ?? this.id,
       status: status ?? this.status,
       title: title ?? this.title,
+      description: description ?? this.description,
+      date: date ?? this.date,
     );
   }
 
@@ -31,6 +39,8 @@ class KanbanItem {
       'id': id,
       'status': status.name,
       'title': title,
+      'description': description,
+      'date': date.toIso8601String(),
     };
   }
 
@@ -39,6 +49,8 @@ class KanbanItem {
       id: map['id'] as String,
       status: KanbanUtil.stringToStatus(map['status']),
       title: map['title'] as String,
+      description: map['description'] as String,
+      date: DateTime.parse(map['date'] as String),
     );
   }
 
@@ -47,18 +59,28 @@ class KanbanItem {
   factory KanbanItem.fromJson(String source) => KanbanItem.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'KanbanItem(id: $id, status: $status, title: $title)';
+  String toString() {
+    return 'KanbanItem(id: $id, status: $status, title: $title, description: $description, date: $date)';
+  }
 
   @override
   bool operator ==(covariant KanbanItem other) {
     if (identical(this, other)) return true;
-  
-    return 
+
+    return
       other.id == id &&
       other.status == status &&
-      other.title == title;
+      other.title == title &&
+      other.description == description &&
+      other.date == date;
   }
 
   @override
-  int get hashCode => id.hashCode ^ status.hashCode ^ title.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+      status.hashCode ^
+      title.hashCode ^
+      description.hashCode ^
+      date.hashCode;
+  }
 }

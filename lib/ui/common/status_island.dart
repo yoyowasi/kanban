@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kanban/enums/kanban_status.dart';
 import 'package:kanban/providers/kanban_provider.dart';
+import 'package:kanban/ui/add_edit_task_screen.dart';
 import 'package:kanban/ui/themes/app_size.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -14,12 +15,11 @@ class StatusIsland extends StatelessWidget {
     return SizedBox(
       height: AppSize.statusIslandHeight,
       child: Row(
-        spacing: 7,
         children: [
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 color: status.bubbleColor,
                 borderRadius: BorderRadius.circular(
@@ -27,14 +27,14 @@ class StatusIsland extends StatelessWidget {
                 ),
               ),
               child: Row(
-                spacing: 10,
                 children: [
-                  Icon(status.icon, size: 20), //
+                  Icon(status.icon, size: 20),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       status.label,
-                      style: TextStyle(
-                        fontSize: 20, //
+                      style: const TextStyle(
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -43,24 +43,31 @@ class StatusIsland extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 7),
           _buildCircleBubble(
-            child: Text(
-              '2',
-              style: TextStyle(
-                fontWeight: FontWeight.w600, //
-                fontSize: 16,
-              ),
+            child: Consumer<KanbanProvider>(
+              builder: (context, provider, child) {
+                final count = provider.items.where((e) => e.status == status).length;
+                return Text(
+                  count.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                );
+              },
             ),
           ),
+          const SizedBox(width: 7),
           _buildCircleBubble(
             onTap: () {
-              // TODO 
-              debugPrint('$status 추가하기');
-              context.read<KanbanProvider>().addItem(status, 'New Task');
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => AddEditTaskScreen(status: status),
+              ));
             },
             visible: status != KanbanStatus.done,
-            child: Icon(
-              LucideIcons.plus, //
+            child: const Icon(
+              LucideIcons.plus,
               size: 20,
             ),
           ),
@@ -70,26 +77,25 @@ class StatusIsland extends StatelessWidget {
   }
 
   Widget _buildCircleBubble({
-    required Widget child, //
+    required Widget child,
     bool visible = true,
     VoidCallback? onTap,
   }) {
     if (!visible) {
       return SizedBox.fromSize(
-        size: Size.fromWidth(
-          AppSize.statusIslandHeight
-          ),
+        size: Size.fromWidth(AppSize.statusIslandHeight),
       );
     }
 
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSize.statusIslandHeight / 2),
       child: Container(
         width: AppSize.statusIslandHeight,
         height: AppSize.statusIslandHeight,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: status.bubbleColor, //
+          color: status.bubbleColor,
           shape: BoxShape.circle,
         ),
         child: child,

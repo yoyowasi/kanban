@@ -12,43 +12,53 @@ class KanbanList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-      color: status.backgroundColor,
-      borderRadius: BorderRadius.circular(10)
+        color: status.backgroundColor,
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-        crossAxisAlignment: .stretch,
-        spacing: 15,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           StatusIsland(status: status),
+          const SizedBox(height: 15),
           Expanded(
             child: Consumer<KanbanProvider>(
-              builder: (context,provider,_){
-                final items = provider.items;
-                final searchedItems = items.where((e) => e.status == status).toList();
+              builder: (context, provider, _) {
+                final items = provider.items.where((e) => e.status == status).toList();
                 return ListView.separated(
-                itemCount: searchedItems.length,
-                shrinkWrap: true,
-                separatorBuilder: (context, index){
-                  return SizedBox(height: 20,);
-                },
-                itemBuilder: (context, index){
-                  final item = searchedItems[index];
-                  return KanbanItem(
-                    status: status,
-                    title: item.title,
-                    onCheckbox: (){
-                      debugPrint('$status => 체크박스');
-                    },
-                    onDelete: () {
-                      debugPrint('$status => 삭제버튼');
-                      provider.deleteItemIndex(item.id);
-                    },
-                    onStatus: () {
-
-                    },
-                  );
+                  itemCount: items.length,
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 20);
+                  },
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return KanbanItem(
+                      item: item,
+                      onCheckbox: () {
+                        provider.toggleItemCheckbox(item.id);
+                      },
+                      onDelete: () {
+                        provider.deleteItemIndex(item.id);
+                      },
+                      onPrevStatus: () { // 이전 상태로 변경하는 로직
+                        if (item.status == KanbanStatus.progress) {
+                          provider.updateItemStatus(item.id, KanbanStatus.todo);
+                        }
+                      },
+                      onStatus: () { // 다음 상태로 변경하는 로직
+                        KanbanStatus newStatus;
+                        if (item.status == KanbanStatus.todo) {
+                          newStatus = KanbanStatus.progress;
+                        } else if (item.status == KanbanStatus.progress) {
+                          newStatus = KanbanStatus.done;
+                        } else {
+                          return;
+                        }
+                        provider.updateItemStatus(item.id, newStatus);
+                      },
+                    );
                   },
                 );
               },
