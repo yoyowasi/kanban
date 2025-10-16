@@ -42,21 +42,17 @@ class KanbanList extends StatelessWidget {
                       onDelete: () {
                         provider.deleteItemIndex(item.id);
                       },
-                      onPrevStatus: () { // 이전 상태로 변경하는 로직
+                      onPrevStatus: () {
                         if (item.status == KanbanStatus.progress) {
                           provider.updateItemStatus(item.id, KanbanStatus.todo);
                         }
                       },
-                      onStatus: () { // 다음 상태로 변경하는 로직
-                        KanbanStatus newStatus;
+                      onStatus: () {
                         if (item.status == KanbanStatus.todo) {
-                          newStatus = KanbanStatus.progress;
+                          provider.updateItemStatus(item.id, KanbanStatus.progress);
                         } else if (item.status == KanbanStatus.progress) {
-                          newStatus = KanbanStatus.done;
-                        } else {
-                          return;
+                          provider.updateItemStatus(item.id, KanbanStatus.done);
                         }
-                        provider.updateItemStatus(item.id, newStatus);
                       },
                     );
                   },
