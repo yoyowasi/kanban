@@ -132,7 +132,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
             TextFormField(
               controller: _descriptionController,
               keyboardType: TextInputType.multiline,
-              minLines: 12,
+              minLines: 16,
               maxLines: null,
               decoration: InputDecoration(
                 filled: false,
@@ -150,10 +150,10 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
       ),
       bottomNavigationBar: SafeArea(
         minimum: EdgeInsets.fromLTRB(
-          16,
+          120, // 좌우 여백을 늘려 버튼 크기 조절
           8,
-          16,
-          24 + MediaUtils.viewInsetsBottom(context),
+          120, // 좌우 여백을 늘려 버튼 크기 조절
+          48 + MediaUtils.viewInsetsBottom(context),
         ),
         child: SizedBox(
           height: 40,

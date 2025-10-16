@@ -23,9 +23,17 @@ class KanbanItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateText = Text(
+      DateFormat('yyyy. MM. dd HH:mm').format(item.date),
+      style: const TextStyle(
+        fontSize: 14,
+        color: Colors.black, // ✅ 시간 색상을 검은색으로 변경
+      ),
+    );
+
     return GestureDetector(
       onTap: () {
-        // 'Done' 상태에서는 수정 화면으로 이동하지 않음
+        // ✅ Done 상태에서는 수정 화면 이동 안 함
         if (item.status != KanbanStatus.done) {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => AddEditTaskScreen(status: item.status, item: item),
@@ -65,51 +73,57 @@ class KanbanItem extends StatelessWidget {
             ),
           ],
         ),
-        // 'description'을 footer로 옮기지 않고, ShadCard의 기본 description 슬롯을 사용합니다.
-        // 이렇게 하면 Done 상태에서도 내용이 보이게 됩니다.
-        description: Padding(
-          padding: const EdgeInsets.only(left: 36, top: 4), // 체크박스 너비만큼 들여쓰기
-          child: Text(
-            item.description,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
-          ),
-        ),
-        footer: Padding(
-          padding: const EdgeInsets.only(left: 36, top: 8), // 체크박스 너비만큼 들여쓰기
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // 1. 모든 상태에서 시간 색상을 검은색으로 변경합니다.
-              Text(
-                DateFormat('yyyy. MM. dd HH:mm').format(item.date),
-                style: const TextStyle(fontSize: 14, color: Colors.black),
-              ),
-
-              // 'Done' 상태가 아닐 때만 버튼들을 표시합니다.
-              if (item.status != KanbanStatus.done)
-                Row(
+        footer: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            // ✅ 모든 상태에서 description은 유지 (Done도 포함)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (item.status == KanbanStatus.progress)
-                      IconButton(
-                        onPressed: onPrevStatus,
-                        visualDensity: VisualDensity.compact,
-                        iconSize: 30,
-                        icon: Icon(item.status.prevIcon),
-                      ),
-                    if (item.status == KanbanStatus.todo)
-                      IconButton(
-                        onPressed: onStatus,
-                        visualDensity: VisualDensity.compact,
-                        iconSize: 30,
-                        icon: Icon(item.status.nextIcon),
-                      ),
+                    Text(
+                      item.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+                    // ✅ Done일 때는 오른쪽 정렬, 나머지는 왼쪽
+                    if (item.status == KanbanStatus.done)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: dateText,
+                      )
+                    else
+                      dateText,
                   ],
-                )
-            ],
-          ),
+                ),
+              ),
+            ),
+
+            // ✅ Done 상태에서는 오른쪽 아이콘(Play/Pause)을 표시하지 않음
+            if (item.status != KanbanStatus.done)
+              Row(
+                children: [
+                  if (item.status == KanbanStatus.progress)
+                    IconButton(
+                      onPressed: onPrevStatus,
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 30,
+                      icon: Icon(item.status.prevIcon),
+                    ),
+                  if (item.status == KanbanStatus.todo)
+                    IconButton(
+                      onPressed: onStatus,
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 30,
+                      icon: Icon(item.status.nextIcon),
+                    ),
+                ],
+              )
+          ],
         ),
       ),
     );
